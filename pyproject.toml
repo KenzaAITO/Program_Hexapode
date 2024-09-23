@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "program-hexapode"
+version = "0.1.0"
+description = ""
+authors = ["Zazou <aito.kenza@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+black = "^24.8.0"
+dynamixel-sdk = "^3.7.31"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
