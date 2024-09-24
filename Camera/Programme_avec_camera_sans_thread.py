@@ -1,7 +1,8 @@
-import cv2
-import numpy as np
 import os
 import time
+
+import cv2
+import numpy as np
 from dynamixel_sdk import *  # Uses Dynamixel SDK library
 
 # Define Dynamixel model

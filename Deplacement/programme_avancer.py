@@ -1,6 +1,5 @@
 import os
 
-
 if os.name == "nt":
 
     import msvcrt
@@ -11,7 +10,9 @@ if os.name == "nt":
 
 else:
 
-    import sys, tty, termios
+    import sys
+    import termios
+    import tty
 
     fd = sys.stdin.fileno()
 
@@ -33,7 +34,6 @@ else:
 
 
 from dynamixel_sdk import *  # Uses Dynamixel SDK library
-
 
 # Define Dynamixel model
 

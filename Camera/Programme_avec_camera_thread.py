@@ -1,8 +1,9 @@
+import os
+import threading
+import time
+
 import cv2
 import numpy as np
-import os
-import time
-import threading
 from dynamixel_sdk import *  # Uses Dynamixel SDK library
 
 MY_DXL = "X_SERIES"  # X330 (5.0 V recommended), X430, X540, 2X430

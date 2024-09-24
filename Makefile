@@ -34,8 +34,11 @@ clean-env: ## Clean poetry local files
 	rm -rf .venv
 
 format: ## Run pre-commit hooks
-	@poetry run black uwb_mqtt
-	@poetry run isort --profile black uwb_mqtt
+	@poetry run black Deplacement
+	@poetry run isort --profile black Deplacement
+
+	@poetry run black Camera
+	@poetry run isort --profile black Camera
 ##@poetry run pre-commit run -a
 
 sync: ## Merge changes from main branch to your current branch
