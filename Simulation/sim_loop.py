@@ -1,6 +1,10 @@
-from sim_visualization import simulate_color_detection
-from sim_deplacement import move_to_position
 import time
+
+from sim_deplacement import move_to_position
+from sim_visualization import simulate_color_detection
+
+from Camera.Programme_avec_camera_thread import green_detected_flag, red_detected_flag
+
 
 def simulation_loop():
     global red_detected_flag, green_detected_flag
@@ -20,11 +24,12 @@ def simulation_loop():
             # Move the "hexapod"
             move_to_position({1: 1, 7: 0, 9: 1})
             red_detected_flag = False
-            
+
         if green_detected_flag:
             move_to_position({1: 0, 7: 1, 9: 0})
             green_detected_flag = False
 
         time.sleep(1)  # Simulate time delay in loop
+
 
 simulation_loop()

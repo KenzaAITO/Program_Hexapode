@@ -32,3 +32,14 @@
 
 ## Future Enhancements
 
+
+
+tous les programmes ce trouve dans le dossier: protocol2_0
+
+voici le chemin sur la raspberry:
+
+/home/raspberry/DynamixelSDK/python/tests/protocol2_0
+
+
+NB: le programme demo se lance automatiquement en arriere plan lors
+du démarage de la raspeberry

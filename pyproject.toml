@@ -11,6 +11,7 @@ black = "^24.8.0"
 dynamixel-sdk = "^3.7.31"
 isort = "^5.13.2"
 mock = "^5.1.0"
+pylance = "^0.18.0"
 
 
 [build-system]

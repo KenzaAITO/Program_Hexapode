@@ -39,6 +39,9 @@ format: ## Run pre-commit hooks
 
 	@poetry run black Camera
 	@poetry run isort --profile black Camera
+
+	@poetry run black Simulation
+	@poetry run isort --profile black Simulation
 ##@poetry run pre-commit run -a
 
 sync: ## Merge changes from main branch to your current branch
