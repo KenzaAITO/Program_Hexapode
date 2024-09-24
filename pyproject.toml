@@ -12,6 +12,8 @@ dynamixel-sdk = "^3.7.31"
 isort = "^5.13.2"
 mock = "^5.1.0"
 pylance = "^0.18.0"
+pillow = "^10.4.0"
+opencv-python = "^4.10.0.84"
 
 
 [build-system]

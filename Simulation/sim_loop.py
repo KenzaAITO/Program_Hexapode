@@ -3,7 +3,8 @@ import time
 from sim_deplacement import move_to_position
 from sim_visualization import simulate_color_detection
 
-from Camera.Programme_avec_camera_thread import green_detected_flag, red_detected_flag
+red_detected_flag = False
+green_detected_flag = False
 
 
 def simulation_loop():
