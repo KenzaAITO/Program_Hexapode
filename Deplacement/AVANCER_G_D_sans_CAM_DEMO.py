@@ -1,3 +1,10 @@
+#######  Wave Gait
+#In a wave gait, each leg moves one after the other in a smooth, sequential pattern. 
+#This gives a more controlled, slower movement, and only one leg is lifted at a time.
+#However, based on the movement patterns in the code, 
+#this gait is less likely unless modified to move individual legs more slowly.
+######
+
 import os
 
 if os.name == "nt":
