@@ -14,6 +14,7 @@ mock = "^5.1.0"
 pylance = "^0.18.0"
 pillow = "^10.4.0"
 opencv-python = "^4.10.0.84"
+keyboard = "^0.13.5"
 
 
 [build-system]
