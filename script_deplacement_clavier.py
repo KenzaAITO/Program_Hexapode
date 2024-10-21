@@ -1,5 +1,5 @@
 import keyboard
-from Deplacement.deplacement_hexapode import HexapodMovement
+from Deplacement.hexapode_movement import HexapodMovement
 
 def main():
     hexapod = HexapodMovement(port="/dev/ttyUSB0")
