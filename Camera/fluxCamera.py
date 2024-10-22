@@ -1,34 +1,38 @@
-from picamera2 import Picamera2, Preview
-import time
+import cv2
 
 class Camera:
     def __init__(self):
-        # Initialisation de la caméra
-        self.picam2 = Picamera2()
-        self.picam2.configure(self.picam2.create_preview_configuration())
+        # Initialiser la capture vidéo depuis la caméra
+        self.cap = cv2.VideoCapture(0)  # 0 correspond à la première caméra disponible
 
-    def start_stream(self, duration=10):
-        """Démarre le flux vidéo pendant une durée donnée (en secondes)."""
+    def start_stream(self):
+        """Démarre le flux vidéo et affiche l'aperçu dans une fenêtre."""
+        if not self.cap.isOpened():
+            print("Impossible d'ouvrir la caméra")
+            return
+
         print("Démarrage du flux vidéo...")
-        self.picam2.start_preview(Preview.QTGL)  # Affichage dans une fenêtre
-        self.picam2.start()
-        time.sleep(duration)  # Durée du flux
-        self.picam2.stop_preview()
-        self.picam2.stop()
-        print("Flux vidéo terminé.")
 
-    def capture_image(self, filename="image.jpg"):
-        """Capture une image et l'enregistre sous le nom spécifié."""
-        print(f"Capture de l'image et enregistrement sous '{filename}'")
-        self.picam2.configure(self.picam2.create_still_configuration())
-        self.picam2.start()
-        time.sleep(2)  # Temps pour laisser la caméra s'ajuster
-        self.picam2.capture_file(filename)
-        self.picam2.stop()
-        print(f"Image enregistrée sous '{filename}'.")
+        while True:
+            # Lire une image (frame) de la caméra
+            ret, frame = self.cap.read()
+            if not ret:
+                print("Erreur lors de la capture vidéo")
+                break
+
+            # Afficher l'image capturée dans une fenêtre
+            cv2.imshow('Flux Vidéo', frame)
+
+            # Arrêter le flux si la touche 'q' est appuyée
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        # Libérer la caméra et fermer la fenêtre
+        self.cap.release()
+        cv2.destroyAllWindows()
+        print("Flux vidéo terminé.")
 
 # Exemple d'utilisation
 if __name__ == "__main__":
     camera = Camera()
-    camera.start_stream(duration=10)  # Lancer le flux vidéo pendant 10 secondes
-    # camera.capture_image("photo.jpg")  # Décommentez pour capturer une image
+    camera.start_stream()

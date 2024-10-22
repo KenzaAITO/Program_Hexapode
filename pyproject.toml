@@ -16,6 +16,7 @@ pillow = "^10.4.0"
 opencv-python = "^4.10.0.84"
 keyboard = "^0.13.5"
 tdqm = "^0.0.1"
+c2 = "^0.1.7"
 
 
 [build-system]
