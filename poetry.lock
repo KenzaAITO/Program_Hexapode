@@ -199,7 +199,10 @@ files = [
 ]
 
 [package.dependencies]
-numpy = {version = ">=1.26.0", markers = "python_version >= \"3.12\""}
+numpy = [
+    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
+]
 
 [[package]]
 name = "packaging"
@@ -3279,5 +3282,5 @@ cp2110 = ["hidapi"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.12"
-content-hash = "2803f1b7ae0d59c5c471a12ffb0ea0c7c2b0234c2d84b7f65354608f705600da"
+python-versions = "^3.11"
+content-hash = "d1f12176db8de63e937982f76703b458463924bdd9daca298a6d49360cd541c6"
