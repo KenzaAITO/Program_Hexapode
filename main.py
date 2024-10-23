@@ -5,12 +5,12 @@ def main():
 
     try:
         hexapod.forward()
-        # Add delays or condition checks to complete movements
-        hexapod.backward()
         hexapod.left()
+        hexapod.rotate('right')
+        hexapod.backward()
         hexapod.right()
         hexapod.rotate('left')
-        hexapod.rotate('right')
+        
     finally:
         hexapod.stop()
         hexapod.close()
