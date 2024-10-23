@@ -1,81 +1,81 @@
-import pygame
+import cv2
 import numpy as np
-from PIL import Image, ImageOps
 
 class Camera:
     def __init__(self):
-        # Initialiser la caméra avec pygame
-        pygame.camera.init()
-        self.cam = pygame.camera.Camera(pygame.camera.list_cameras()[0], (640, 480))
-        self.cam.start()
+        # Initialiser la capture vidéo depuis la caméra
+        self.cap = cv2.VideoCapture(0)  # 0 correspond à la première caméra disponible
 
     def start_stream(self, detector):
-        """Démarre le flux vidéo et transmet chaque image au détecteur de couleur."""
+        """Démarre le flux vidéo et transmet chaque frame au détecteur de couleur."""
+        if not self.cap.isOpened():
+            print("Impossible d'ouvrir la caméra")
+            return
+
         print("Démarrage du flux vidéo...")
-        running = True
 
-        while running:
-            # Capture une image depuis la caméra
-            img_surface = self.cam.get_image()
+        while True:
+            # Capture une frame de la caméra
+            ret, frame = self.cap.read()
+            if not ret:
+                print("Erreur lors de la capture vidéo")
+                break
 
-            # Convertir l'image Pygame en image PIL pour traitement
-            img_array = pygame.surfarray.array3d(img_surface)
-            img_pil = Image.fromarray(np.transpose(img_array, (1, 0, 2)))
+            # Appliquer la détection de couleur sur la frame
+            color_frame = detector.detect_color(frame)
 
-            # Appliquer la détection de couleur
-            color_image = detector.detect_color(img_pil)
+            # Afficher le flux original et le flux avec la couleur détectée
+            cv2.imshow('Flux Video Original', frame)
+            cv2.imshow('Détection de Couleur', color_frame)
 
-            # Afficher l'image originale et celle avec la détection de couleur
-            img_original = np.array(img_pil)
-            img_detected = np.array(color_image)
+            # Appuyer sur 'q' pour quitter
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
-            pygame.surfarray.blit_array(img_surface, np.transpose(img_detected, (1, 0, 2)))
-            pygame.display.flip()
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
-        self.cam.stop()
+        # Libérer la caméra et fermer les fenêtres
+        self.cap.release()
+        cv2.destroyAllWindows()
         print("Flux vidéo terminé.")
 
 
 class ColorDetector:
-    def __init__(self, target_color, tolerance=60):
+    def __init__(self, lower_color_range, upper_color_range):
         """
-        Initialise le détecteur de couleur avec la couleur cible et une tolérance.
-        :param target_color: La couleur cible (en RGB) à détecter.
-        :param tolerance: La tolérance pour la détection des couleurs.
+        Initialise le détecteur de couleur avec les plages HSV pour la couleur à détecter.
+        :param lower_color_range: Limite inférieure de la plage de couleurs (en HSV).
+        :param upper_color_range: Limite supérieure de la plage de couleurs (en HSV).
         """
-        self.target_color = target_color
-        self.tolerance = tolerance
+        self.lower_color_range = lower_color_range
+        self.upper_color_range = upper_color_range
 
-    def detect_color(self, image):
-        """Détecte la couleur cible dans l'image et renvoie une nouvelle image avec la couleur détectée."""
-        # Convertir l'image PIL en format numpy
-        image_np = np.array(image)
+    def detect_color(self, frame):
+        """Applique la détection de couleur sur une image (frame) et renvoie le résultat."""
+        # Convertit l'image de BGR à HSV (teinte, saturation, valeur)
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-        # Définir les limites pour la détection des couleurs
-        lower_bound = np.maximum(self.target_color - self.tolerance, 0)
-        upper_bound = np.minimum(self.target_color + self.tolerance, 255)
+        # Créer un masque pour les pixels correspondant à la plage de couleurs définie
+        mask = cv2.inRange(hsv, self.lower_color_range, self.upper_color_range)
 
-        # Créer un masque pour les pixels correspondant à la couleur cible
-        mask = np.all(np.logical_and(image_np >= lower_bound, image_np <= upper_bound), axis=-1)
-
-        # Appliquer le masque sur l'image originale
-        result = np.zeros_like(image_np)
-        result[mask] = image_np[mask]
+        # Appliquer le masque sur l'image d'origine
+        result = cv2.bitwise_and(frame, frame, mask=mask)
         
-        return Image.fromarray(result)
+        return result
 
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    # Couleur cible : rouge (en RGB)
-    target_color = np.array([255, 0, 0])
+    # Plages de couleurs pour le rouge en HSV
+    lower_red1 = np.array([0, 120, 70])
+    upper_red1 = np.array([10, 255, 255])
+    lower_red2 = np.array([170, 120, 70])
+    upper_red2 = np.array([180, 255, 255])
 
-    # Créer l'instance du détecteur de couleur
-    color_detector = ColorDetector(target_color)
+    # Créer deux masques pour couvrir les différentes nuances de rouge
+    lower_color_range = np.array([0, 120, 70])
+    upper_color_range = np.array([180, 255, 255])
+
+    # Créer l'instance du détecteur de couleur pour le rouge
+    color_detector = ColorDetector(lower_color_range, upper_color_range)
 
     # Créer une instance de la caméra et démarrer le flux vidéo avec détection de couleur
     camera = Camera()
