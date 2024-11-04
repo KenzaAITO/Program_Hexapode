@@ -20,6 +20,7 @@ c2 = "^0.1.7"
 tqdm = "^4.66.5"
 pygame = "^2.6.1"
 opencv-python-headless = "^4.10.0.84"
+pandas = "^2.2.3"
 
 
 [build-system]
