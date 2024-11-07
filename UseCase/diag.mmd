@@ -1,0 +1,38 @@
+sequenceDiagram
+    participant User
+    participant HexapodMovement
+    participant DynamixelSDK
+
+    %% Start
+    User->>HexapodMovement: Initialize (port, baudrate)
+    HexapodMovement->>DynamixelSDK: Open port
+    HexapodMovement->>DynamixelSDK: Set baud rate
+    HexapodMovement->>DynamixelSDK: Enable all motors
+
+    %% Move Forward
+    User->>HexapodMovement: Call forward()
+    HexapodMovement->>DynamixelSDK: Move to forward positions
+
+    %% Move Backward
+    User->>HexapodMovement: Call backward()
+    HexapodMovement->>DynamixelSDK: Move to backward positions
+
+    %% Move Left
+    User->>HexapodMovement: Call left()
+    HexapodMovement->>DynamixelSDK: Move to left positions
+
+    %% Move Right
+    User->>HexapodMovement: Call right()
+    HexapodMovement->>DynamixelSDK: Move to right positions
+
+    %% Rotate Left
+    User->>HexapodMovement: Call rotate('left')
+    HexapodMovement->>DynamixelSDK: Rotate left
+
+    %% Rotate Right
+    User->>HexapodMovement: Call rotate('right')
+    HexapodMovement->>DynamixelSDK: Rotate right
+
+    %% Stop
+    User->>HexapodMovement: Call stop()
+    HexapodMovement->>DynamixelSDK: Disable torque on all motors

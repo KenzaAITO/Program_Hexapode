@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "program-hexapode"
+version = "0.1.0"
+description = ""
+authors = ["Zazou <aito.kenza@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+black = "^24.8.0"
+dynamixel-sdk = "^3.7.31"
+isort = "^5.13.2"
+mock = "^5.1.0"
+pylance = "^0.18.0"
+pillow = "^10.4.0"
+opencv-python = "^4.10.0.84"
+keyboard = "^0.13.5"
+tdqm = "^0.0.1"
+c2 = "^0.1.7"
+tqdm = "^4.66.5"
+pygame = "^2.6.1"
+opencv-python-headless = "^4.10.0.84"
+pandas = "^2.2.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
