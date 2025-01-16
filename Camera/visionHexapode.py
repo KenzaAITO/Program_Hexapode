@@ -21,7 +21,7 @@ class VisionHexapode:
         """
         try:
             # Test de capture pour vérifier que la caméra est opérationnelle
-            result = subprocess.run(["libcamera-still", "-t", "100", "-o", "/dev/null"],
+            result = subprocess.run(["libcamera-still", "-t", "10", "-o", "/dev/null"],
                                     capture_output=True, text=True)
             if result.returncode == 0:
                 return True
@@ -32,7 +32,7 @@ class VisionHexapode:
             print("Exception lors de l'initialisation de la caméra :", e)
             return False
 
-    def start_video_stream(self, duration=10):
+    def start_video_stream(self, duration):
         """
         Démarre un flux vidéo pour une durée donnée, adapté pour l'hexapode.
         :param duration: Durée du flux vidéo en secondes.
@@ -44,7 +44,8 @@ class VisionHexapode:
         try:
             print("Démarrage du flux vidéo")
             self.process = subprocess.Popen(
-                ["libcamera-vid", "-t", f"{duration * 1000}", "--inline", "--nopreview", "-o", "-"]
+                #["libcamera-vid", "-t", f"{duration * 10}", "--inline", "--nopreview", "-o", "-"]
+                ["libcamera-vid", "-t", f"{duration * 10}", "--inline", "-o", "-"]
             )
             time.sleep(duration)
             print("Flux vidéo en cours...")
