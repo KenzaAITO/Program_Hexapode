@@ -44,7 +44,8 @@ class VisionHexapode:
         try:
             print("Démarrage du flux vidéo")
             self.process = subprocess.Popen(
-                ["libcamera-vid", "-t", f"{duration * 10}", "--inline", "--nopreview", "-o", "-"]
+                #["libcamera-vid", "-t", f"{duration * 10}", "--inline", "--nopreview", "-o", "-"]
+                ["libcamera-vid", "-t", f"{duration * 10}", "--inline", "-o", "-"]
             )
             time.sleep(duration)
             print("Flux vidéo en cours...")
