@@ -43,28 +43,7 @@ class Camera:
         print("Flux vidéo terminé.")
 
 
-class ColorDetector:
-    def __init__(self, lower_color_range, upper_color_range):
-        """
-        Initialise le détecteur de couleur avec les plages HSV pour la couleur à détecter.
-        :param lower_color_range: Limite inférieure de la plage de couleurs (en HSV).
-        :param upper_color_range: Limite supérieure de la plage de couleurs (en HSV).
-        """
-        self.lower_color_range = lower_color_range
-        self.upper_color_range = upper_color_range
 
-    def detect_color(self, frame):
-        """Applique la détection de couleur sur une image (frame) et renvoie le résultat."""
-        # Convertit l'image de BGR à HSV (teinte, saturation, valeur)
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
-        # Créer un masque pour les pixels correspondant à la plage de couleurs définie
-        mask = cv2.inRange(hsv, self.lower_color_range, self.upper_color_range)
-
-        # Appliquer le masque sur l'image d'origine
-        result = cv2.bitwise_and(frame, frame, mask=mask)
-        
-        return result
 
 
 # Exemple d'utilisation
