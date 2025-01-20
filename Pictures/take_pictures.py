@@ -27,23 +27,14 @@ class ColorDetection:
 
     @staticmethod
     def analyze_photos(photo_path):
-        #print(f"[INFO] Analyse de la photo : {photo_path}")
+        # print(f"[INFO] Analyse de la photo : {photo_path}")
         image = cv2.imread(photo_path)
 
         if image is None:
-            #print(f"[ERREUR] Impossible de lire la photo : {photo_path}")
-            return
+            # print(f"[ERREUR] Impossible de lire la photo : {photo_path}")
+            return None, None
 
-        red_detected, green_detected = ColorDetection.detect_color(image)
-
-        if red_detected:
-            print("[INFO] Rouge detecte!")
-            return red_detected
-        if green_detected:
-            print("[INFO] Vert detecte!")
-            return green_detected
-        if not red_detected and not green_detected:
-            print("[INFO] Aucune couleur detectee.")
+        return ColorDetection.detect_color(image)
 
 class CameraManager:
     def __init__(self, photo_dir, buffer_size=10):
@@ -58,28 +49,52 @@ class CameraManager:
     def capture_photo(self):
         timestamp = time.strftime("%Y%m%d_%H%M%S")
         photo_path = os.path.join(self.photo_dir, f"photo_{timestamp}.jpg")
-        print(f"[INFO] Capture de la photo : {photo_path}")
+        # print(f"[INFO] Capture de la photo : {photo_path}")
 
-        os.system(f"libcamera-still -o {photo_path} -t 1 ")
+        os.system(f"libcamera-still -o {photo_path} --timeout=1 -n --framerate=10")
+
+        if len(self.photo_buffer) == self.photo_buffer.maxlen:
+            oldest_photo = self.photo_buffer.popleft()
+            if os.path.exists(oldest_photo):
+                os.remove(oldest_photo)
+                # print(f"[INFO] Suppression de l'ancienne photo : {oldest_photo}")
 
         self.photo_buffer.append(photo_path)
         return photo_path
 
     def process_photos(self):
-        #print("[INFO] Analyse des photos dans le buffer...")
+        # print("[INFO] Analyse des photos dans le buffer...")
         for photo in list(self.photo_buffer):
-            ColorDetection.analyze_photos(photo)
+            red_detected, green_detected = ColorDetection.analyze_photos(photo)
+            if red_detected:
+                print(f"[ACTION] Rouge détecté dans l'image : {photo}")
+                return "red"
+            elif green_detected:
+                print(f"[ACTION] Vert détecté dans l'image : {photo}")
+                return "green"
+            else:
+                print(f"[ACTION] Aucune couleur détectée dans l'image : {photo}")
+                return "none"
 
-    def run(self, interval=0.1):
-        while True:
-            photo_path = self.capture_photo()
-            self.process_photos()
-            #print("[INFO] Attente avant la prochaine capture...")
-            time.sleep(interval)
-
-if __name__ == "__main__":
+def main():
     PHOTO_DIR = "./photos"
     BUFFER_SIZE = 10
 
     camera_manager = CameraManager(PHOTO_DIR, BUFFER_SIZE)
-    camera_manager.run(interval=1)
+
+    while True:
+        # print("[INFO] Capture et analyse des photos...")
+        camera_manager.capture_photo()
+        detected_color = camera_manager.process_photos()
+
+        if detected_color == "red":
+            print("[MAIN ACTION] Action pour la couleur rouge.")
+        elif detected_color == "green":
+            print("[MAIN ACTION] Action pour la couleur verte.")
+        elif detected_color == "none":
+            print("[MAIN ACTION] Aucune couleur détectée.")
+
+        time.sleep(0.1)
+
+if __name__ == "__main__":
+    main()
